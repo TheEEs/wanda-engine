@@ -17,7 +17,7 @@ dependencies:
   jennifer_sqlite3_adapter:
     github: imdrasil/jennifer_sqlite3_adapter
   wanda-csrf:
-    github: TheEEs/wanda-csrf
+    github: theees/wanda-csrf
     version: "~>0.1.1"
   schedule:
     github: hugoabonizio/schedule.cr
@@ -25,8 +25,6 @@ dependencies:
     github: phoffer/inflector.cr
     version: "~> 0.1.8"
 
-#scripts:
-  #postinstall: ( cp -i ./bin/wanda.cr  ../../wanda.cr) && (cp -R ./js ../../js) && (cp -i ./bin/sam.cr  ../../sam.cr) &&(chmod -o=r ../../sam.cr) 
 executables:
   - sam.cr
   - wanda.cr
