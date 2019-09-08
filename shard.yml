@@ -1,0 +1,33 @@
+name: wanda
+version: 0.1.0
+
+authors:
+  - TheEEs <visualbasic2013@hotmail.com>
+
+description: |
+  A web framework aimed to make web app developments more enjoyable
+crystal: 0.30.1
+
+dependencies: 
+  kemal:
+    github: kemalcr/kemal
+  jennifer:
+    github: imdrasil/jennifer.cr
+    version: "~> 0.8.0"
+  jennifer_sqlite3_adapter:
+    github: imdrasil/jennifer_sqlite3_adapter
+  wanda-csrf:
+    github: TheEEs/wanda-csrf
+    version: "~>0.1.1"
+  schedule:
+    github: hugoabonizio/schedule.cr
+  inflector:
+    github: phoffer/inflector.cr
+    version: "~> 0.1.8"
+
+#scripts:
+  #postinstall: ( cp -i ./bin/wanda.cr  ../../wanda.cr) && (cp -R ./js ../../js) && (cp -i ./bin/sam.cr  ../../sam.cr) &&(chmod -o=r ../../sam.cr) 
+executables:
+  - sam.cr
+  - wanda.cr
+license: MIT
