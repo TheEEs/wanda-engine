@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/TheEEs/wanda-engine.svg?branch=master)](https://travis-ci.org/TheEEs/wanda-engine)
+[![GitHub release](https://img.shields.io/github/release/TheEEs/wanda-engine.svg)](https://github.com/TheEEs/wanda-engine/releases)
 # wanda
 
 TODO: Write a description here
