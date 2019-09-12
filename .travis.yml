@@ -2,6 +2,6 @@ language: crystal
 
 # Uncomment the following if you'd like Travis to run specs and check code formatting
 script:
-   - crystal ./spec_sam.cr -- db:migration
+   - crystal ./spec_sam.cr -- db:migrate
    - crystal tool format --check
    - crystal spec
