@@ -38,7 +38,7 @@ end
 module Wanda
   macro generate_routes
         {% for verb in {:get, :put, :post, :delete} %}
-            macro {{verb.id}}(route, controller, action = :post)
+            macro {{verb.id}}(route, controller, action = {{verb}})
             ::{{verb.id}}("#{Wanda.namespaces}" + \{{route}}) do |env|  
                 c = \{{controller}}.new env
                 buffered_result = c.\{{action.id}}
@@ -58,8 +58,11 @@ module Wanda
 end
 
 module Wanda
-  macro resources_for(resource_name, only = [:index, :show, :new, :edit, :create, :update, :destroy])
-      {% resource_name = resource_name.underscore %}
+  macro resources_for(resource_name, only = [:index, :show, :new, :edit, :create, :update, :destroy], except = [] of Symbol)
+    {% only = only.select do |verb|
+         !(except.includes? verb)
+       end %}  
+    {% resource_name = resource_name.underscore %}
       {% for method in only %}
         {% if method == :index %}
           Wanda.get {{ "/" + resource_name }} , {{resource_name.id.camelcase}}Controller, :index

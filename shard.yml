@@ -24,7 +24,6 @@ dependencies:
   inflector:
     github: phoffer/inflector.cr
     version: "~> 0.1.8"
-
 executables:
   - sam.cr
   - wanda.cr

@@ -39,7 +39,11 @@ class Wanda::ApplicationController
   end
 
   def csrf
-    self.session.string("csrf")
+    if Wanda::Configs.csrf_enabled?
+      self.session.string("csrf")
+    else
+      nil
+    end
   end
 
   def redirect(location : String)
@@ -53,9 +57,11 @@ class Wanda::ApplicationController
   end
 
   macro render(template, withLayout = true)
-        if @@useLayout && {{withLayout}}
+        if @@useLayout #&& {{withLayout}}
             _yield = ECR.render {{template}}
-            ECR.render "views/layout/layout.ecr" 
+            {% if withLayout %}
+              ECR.render "views/layout/layout.ecr" 
+            {% end %}
         else
             ECR.render {{template}}
         end

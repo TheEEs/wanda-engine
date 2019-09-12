@@ -1,9 +1,46 @@
 require "./spec_helper"
+require "http/client"
 
 describe Wanda do
-  # TODO: Write tests
+  context "send requests to server" do
+    it "should return status code of 200" do
+      response = HTTP::Client.get("http://localhost:3000/user")
+      response.status_code.should eq 200
+    end
 
-  it "works" do
-    true.should eq(true)
+    it "should create new user and return status code of 200" do
+      response = HTTP::Client.post("http://localhost:3000/user", form: {
+        "name"   => "Tran Ba Dat",
+        "gender" => "male",
+      })
+      response.status_code.should eq 200
+    end
+
+    it "should update the last user then return status code of 200" do
+      response = HTTP::Client.put("http://localhost:3000/user/1", form: {
+        "name"   => "Dat Dep Try Than Thanh",
+        "gender" => "male",
+      })
+      response.status_code.should eq 200
+    end
+
+    it "should delete the last user then return status code of 302" do
+      response = HTTP::Client.delete("http://localhost:3000/user/2")
+      response.status_code.should eq 302
+    end
+
+    it "enable csrf protection and expect request to return Forbbiden code (403)" do
+      response = HTTP::Client.options("http://localhost:3000/raise_csrf")
+      response.status_code.should eq 403
+    end
+
+    it "simulate put request via method overrider , expected status code of 200 and response body : put method" do
+      response = HTTP::Client.post("http://localhost:3000/simulate_put",
+        form: {
+          "_method" => "put",
+        })
+      response.status_code.should eq 200
+      response.body.should eq "put method"
+    end
   end
 end
