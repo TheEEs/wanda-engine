@@ -2,13 +2,13 @@
 [![GitHub release](https://img.shields.io/github/release/TheEEs/wanda-engine.svg)](https://github.com/TheEEs/wanda-engine/releases)
 ![GitHub](https://img.shields.io/github/license/TheEEs/wanda-engine)
 # wanda-engine
-Wanda is a web framework aimed to make web development workflow more enjoyable and easier by mimic the best parts of Ruby on Rails. By being written in [Crystal Programing language](https://github.com/crystal-lang/crystal), this framework also attemp to solve the performance matter of Ruby language but still give developers the same felling as if they were making app in Ruby/Rails.
+Wanda is a web framework aimed to make web development workflow more enjoyable and easier by mimic the best parts of Ruby on Rails. By being written in [Crystal programing language](https://github.com/crystal-lang/crystal), this framework also attemps to solve the performance matter of Ruby language but still give developers the same felling as if they were making app in Ruby/Rails.
 
-Wanda-engine is the core parts that difine and drive structure and workflow of an wanda-based application. The engine is required by default in [Wanda Template](https://github.com/TheEEs/wanda). Thanks to many other developers, the framework consists of the following shards:
+Wanda-engine is core part that difine and drive structure and workflow of an wanda-based application. The engine is required by default in [Wanda Template](https://github.com/TheEEs/wanda). Thanks to many other developers, the framework consists of the following shards:
 
 * **Kemal** : provide handy DSLs for communicating with HTTP server.
 * **Jennifer.cr** : ActiveRecord insprited database ORM for Crystal.
-* **wanda-csrf** : Based on [kemal-csrf](https://github.com/kemalcr/kemal-csrf), adding csrf projection to your wanda application.
+* **wanda-csrf** : Based on [kemal-csrf](https://github.com/kemalcr/kemal-csrf), adding csrf protection to your wanda application.
 * **schedule.cr** : running tasks at specific time. 
 * **inflector.cr** : Crystal's port of Rails's ActiveSupport
 * **cache**: Support caching
