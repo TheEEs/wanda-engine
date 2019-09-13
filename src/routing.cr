@@ -28,19 +28,27 @@ end
 
 module Wanda
   macro root(controller, action)
-            ::get("#{Wanda.namespaces}" + "/") do |env| 
-                c = {{controller}}.new env
-                c.{{action.id}}
-            end
+    ::get("#{Wanda.namespaces}" + "/") do |env| 
+      Wanda.cache_engine.fetch(env.request.path) do 
+        c = {{controller}}.new env
+        buffered_result = c.{{action.id}}
+        redirected = Wanda.redirected
+        if redirected
+          Wanda.redirected = nil
+          redirected
+        else
+          buffered_result
         end
-end
+      end
+    end
+  end
 
-module Wanda
   macro generate_routes
         {% for verb in {:get, :put, :post, :delete} %}
             macro {{verb.id}}(route, controller, action = {{verb}})
             ::{{verb.id}}("#{Wanda.namespaces}" + \{{route}}) do |env|  
               {% if verb == :get %}
+              puts Wanda.cache_engine.class
               Wanda.cache_engine.fetch(env.request.path) do 
                 c = \{{controller}}.new env
                 buffered_result = c.\{{action.id}}

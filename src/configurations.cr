@@ -16,7 +16,7 @@ module Wanda::Configs
     value = value.to_s
     case value
     when "memory"
-      @@cache_enine = Cache::MemoryStore(String, String).new(expires_in: @@cache_expires_after.as(Time::Span))
+      @@cache_engine = Cache::MemoryStore(String, String).new(expires_in: @@cache_expires_after.as(Time::Span))
     when "file"
       path = "#{__DIR__}/../.cache"
       @@cache_engine = Cache::FileStore(String, String).new(expires_in: @@cache_expires_after.as(Time::Span), cache_path: path)
