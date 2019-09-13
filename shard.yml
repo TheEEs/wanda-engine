@@ -24,6 +24,8 @@ dependencies:
   inflector:
     github: phoffer/inflector.cr
     version: "~> 0.1.8"
+  cache:
+    github: mamantoha/cache
 executables:
   - sam.cr
   - wanda.cr

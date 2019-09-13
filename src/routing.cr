@@ -40,6 +40,8 @@ module Wanda
         {% for verb in {:get, :put, :post, :delete} %}
             macro {{verb.id}}(route, controller, action = {{verb}})
             ::{{verb.id}}("#{Wanda.namespaces}" + \{{route}}) do |env|  
+              {% if verb == :get %}
+              Wanda.cache_engine.fetch(env.request.path) do 
                 c = \{{controller}}.new env
                 buffered_result = c.\{{action.id}}
                 redirected = Wanda.redirected
@@ -49,6 +51,18 @@ module Wanda
                 else
                     buffered_result
                 end
+              end
+              {% else %}
+                c = \{{controller}}.new env
+                buffered_result = c.\{{action.id}}
+                redirected = Wanda.redirected
+                if redirected
+                    Wanda.redirected = nil
+                    redirected
+                else
+                    buffered_result
+                end
+              {% end %}
             end
         end
         {% end %}

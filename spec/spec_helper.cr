@@ -59,6 +59,9 @@ Wanda.resources_for "user", except: [:new, :edit, :show]
 Wanda.post "/raise_csrf", UserController, :raise_csrf
 Wanda.put "/simulate_put", UserController, :simulate_put
 Wanda::Configs.bundled_with_turbolinks false
+
+Wanda::Configs.cache_engine :memory
+
 add_handler CSRF.new(
   allowed_methods: ["GET", "PUT", "POST", "DELETE"],
   allowed_routes: [
