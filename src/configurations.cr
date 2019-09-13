@@ -2,22 +2,24 @@ require "./method_overrider"
 require "jennifer"
 require "jennifer_sqlite3_adapter"
 require "cache"
+
 module Wanda::Configs
   @@csrf_added = false
   @@cache_expires_after = 1.second
-  @@cache_engine = Cache::NullStore(String,String).new expires_in: @@cache_expires_after.as(Time::Span)
+  @@cache_engine = Cache::NullStore(String, String).new expires_in: @@cache_expires_after.as(Time::Span)
+
   def self.cache_expires_after(ts : Time::Span)
-    @@cache_expires_after = ts 
+    @@cache_expires_after = ts
   end
 
   def self.cache_engine(value : String | Symbol, **configurations)
-    value = value.to_s 
-    case value 
+    value = value.to_s
+    case value
     when "memory"
-      @@cache_enine = Cache::MemoryStore(String,String).new(expires_in: @@cache_expires_after.as(Time::Span))
+      @@cache_enine = Cache::MemoryStore(String, String).new(expires_in: @@cache_expires_after.as(Time::Span))
     when "file"
       path = "#{__DIR__}/../.cache"
-      @@cache_engine = Cache::FileStore(String,String).new(expires_in: @@cache_expires_after.as(Time::Span), cache_path: path)
+      @@cache_engine = Cache::FileStore(String, String).new(expires_in: @@cache_expires_after.as(Time::Span), cache_path: path)
     when "redis"
       redis = Redis.new(
         host: configurations[:host]? || "localhost",
@@ -25,11 +27,11 @@ module Wanda::Configs
         password: configurations[:password]?,
         database: configurations[:database]? || Time.now.to_unix.to_i32
       )
-      @@cache_engine = Cache::RedisStore(String,String).new(expires_in: @@cache_expires_after.as(Time::Span),cache: redis)
+      @@cache_engine = Cache::RedisStore(String, String).new(expires_in: @@cache_expires_after.as(Time::Span), cache: redis)
     end
   end
 
-  def self.cache_engine 
+  def self.cache_engine
     @@cache_engine
   end
 
@@ -81,8 +83,7 @@ module Wanda::Configs
 end
 
 module Wanda
-
-  def self.cache_engine 
+  def self.cache_engine
     return Wanda::Configs.cache_engine
   end
 
