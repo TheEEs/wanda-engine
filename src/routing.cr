@@ -48,7 +48,6 @@ module Wanda
             macro {{verb.id}}(route, controller, action = {{verb}})
             ::{{verb.id}}("#{Wanda.namespaces}" + \{{route}}) do |env|  
               {% if verb == :get %}
-              puts Wanda.cache_engine.class
               Wanda.cache_engine.fetch(env.request.path) do 
                 c = \{{controller}}.new env
                 buffered_result = c.\{{action.id}}
