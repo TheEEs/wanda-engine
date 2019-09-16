@@ -48,7 +48,7 @@ module Wanda
             macro {{verb.id}}(route, controller, action = {{verb}})
             ::{{verb.id}}("#{Wanda.namespaces}" + \{{route}}) do |env|  
               {% if verb == :get %}
-              Wanda.cache_engine.fetch(env.request.path) do 
+              Wanda.cache_engine.fetch("ssid:#{env.request.cookies["session_id"]?}:#{env.request.path}") do 
                 c = \{{controller}}.new env
                 buffered_result = c.\{{action.id}}
                 redirected = Wanda.redirected
