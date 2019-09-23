@@ -29,4 +29,8 @@ dependencies:
 executables:
   - sam.cr
   - wanda.cr
+
+scripts:
+  postinstall:
+    false || cp ./bin/*.cr ../../bin/
 license: MIT
