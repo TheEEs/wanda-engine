@@ -58,6 +58,8 @@ end
 Wanda.resources_for "user", except: [:new, :edit, :show]
 Wanda.post "/raise_csrf", UserController, :raise_csrf
 Wanda.put "/simulate_put", UserController, :simulate_put
+Wanda.ws_mount_at :chat_channel, ChatConnection, SocketChannel
+
 Wanda::Configs.bundled_with_turbolinks false
 
 Wanda::Configs.cache_engine :memory

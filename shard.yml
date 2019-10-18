@@ -19,8 +19,6 @@ dependencies:
   wanda-csrf:
     github: theees/wanda-csrf
     version: "~>0.1.1"
-  schedule:
-    github: hugoabonizio/schedule.cr
   inflector:
     github: phoffer/inflector.cr
     version: "~> 0.1.8"
@@ -29,8 +27,6 @@ dependencies:
 executables:
   - sam.cr
   - wanda.cr
-
-scripts:
-  postinstall:
-    false || cp ./bin/*.cr ../../bin/
+#scripts:
+  #postinstall: false || cp ./bin/*.cr ../../bin/
 license: MIT

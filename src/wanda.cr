@@ -1,6 +1,7 @@
 require "kemal"
 require "wanda-csrf"
 require "./configurations"
+require "./socket_connection"
 require "./routing"
 require "./viewHelpers"
 require "./application_controller"

@@ -29,7 +29,7 @@ end
 module Wanda
   macro root(controller, action)
     ::get("#{Wanda.namespaces}" + "/") do |env| 
-      Wanda.cache_engine.fetch(env.request.path) do 
+      Wanda.cache_engine.fetch("ssid:#{env.request.cookies["session_id"]?}:root_path") do 
         c = {{controller}}.new env
         buffered_result = c.{{action.id}}
         redirected = Wanda.redirected
@@ -101,5 +101,17 @@ module Wanda
           Wanda.delete {{ "/" + resource_name + "/:id" }} , {{resource_name.id.camelcase}}Controller, :destroy
         {% end %}
       {% end %}
+    end
+
+  macro web_socket_mount(mount_point, connection)
+      ::ws {{mount_point}} do |socket,context| 
+        new_connection = Wanda::WebSocketConnection.new socket,context
+        if new_connection.authorized? 
+          new_connection.connected 
+          Wanda::SOCKET_POOLS.add_connection_to_the_pool(new_connection.streamed_from,new_connection)
+        else
+          new_connection.reject
+        end
+      end
     end
 end

@@ -43,4 +43,7 @@ describe Wanda do
       response.body.should eq "put method"
     end
   end
+
+  context "enable a websocket connection to testing server" do
+  end
 end
