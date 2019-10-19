@@ -3,7 +3,7 @@ require "http/web_socket"
 module Wanda
   SOCKET_POOLS = WebSocketConnectionPools.new
 
-  abstract class WebSocketConnection
+  class WebSocketConnection
     @stream_from = ""
 
     def initialize(@socket : HTTP::WebSocket, @env : HTTP::Server::Context)
@@ -11,7 +11,7 @@ module Wanda
         self.received message
       end
       @socket.on_close do
-        Wanda::SOCKET_POOLS.remove_connection_from_the_pool self.streamd_from, self
+        Wanda::SOCKET_POOLS.remove_connection_from_the_pool self.streamed_from, self
         self.disconnected
       end
     end
@@ -24,16 +24,16 @@ module Wanda
       @stream_from = where
     end
 
-    protected def streamed_from
+    def streamed_from
       @stream_from
     end
 
-    protected def reject
+    def reject
       @socket.close
     end
 
     def stop
-      Wanda::SOCKET_POOLS.remove_connection_from_the_pool self.streamd_from, self
+      # Wanda::SOCKET_POOLS.remove_connection_from_the_pool self.streamed_from, self
       @socket.close
     end
 
@@ -41,41 +41,45 @@ module Wanda
       Wanda::SOCKET_POOLS[name]
     end
 
-    abstract def authorize
-
-    macro authorized?
-        authorize
+    def authorize
     end
 
-    
-    abstract def connected
-    abstract def received(message : String)
+    def authorized?
+      authorize
+    end
+
+    def connected
+    end
+
+    def received(message : String)
+    end
 
     def send_back(message : String)
       @socket.send(message)
     end
 
     def broadcast(message : String)
-        Wanda::SOCKET_POOLS.broadcast_to(self.streamed_from, message)
+      Wanda::SOCKET_POOLS.broadcast_to(self.streamed_from, message)
     end
 
-    abstract def disconnected
+    def disconnected
+    end
   end
 
   class WebSocketConnectionPools
     def initialize(@pools = {} of String => Array(Wanda::WebSocketConnection))
     end
 
-    def add_connection_to_the_pool(name : String, connection : Wanda::WebSocketConnection)
+    def add_connection_to_the_pool(name : String, connection)
       pool = @pools[name]?
       if pool
         pool << connection
       else
-        @pools[name] = [connection]
+        @pools[name] = [connection] of Wanda::WebSocketConnection
       end
     end
 
-    def remove_connection_from_the_pool(name : String, connection : Wanda::WebSocketConnection)
+    def remove_connection_from_the_pool(name : String, connection)
       pool = @pools[name]
       connection.stop
       pool.delete(connection)
@@ -87,9 +91,10 @@ module Wanda
     end
 
     def broadcast_to(pool_name : String, message : String)
-      @pools[pool_name]?.try(&.each do |connection|
+      pool = @pools[pool_name]
+      pool.each do |connection|
         connection.send_back message
-      end)
+      end
     end
   end
 end

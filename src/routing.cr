@@ -105,7 +105,7 @@ module Wanda
 
   macro web_socket_mount(mount_point, connection)
       ::ws {{mount_point}} do |socket,context| 
-        new_connection = Wanda::WebSocketConnection.new socket,context
+        new_connection = {{connection}}.new socket,context
         if new_connection.authorized? 
           new_connection.connected 
           Wanda::SOCKET_POOLS.add_connection_to_the_pool(new_connection.streamed_from,new_connection)

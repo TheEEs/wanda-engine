@@ -6,7 +6,10 @@ require "../src/configurations"
 require "../src/routing"
 require "../src/viewHelpers"
 require "../src/application_controller"
+require "../src/socket_connection"
 require "./models/*"
+
+CHANNEL = Channel(String).new
 
 module Wanda::ViewHelpers
   Wanda.generate_views_helper "./spec/view_helpers/LinkTo.ecr"
@@ -55,10 +58,29 @@ class UserController < Wanda::ApplicationController
   end
 end
 
+class TestWsConnection < Wanda::WebSocketConnection
+  def authorize
+    true
+  end
+
+  def connected
+    stream_from "/chat/channel"
+    puts "Hello WebSocket, I'm Connected"
+  end
+
+  def received(message : String)
+    broadcast "send back:#{message}"
+  end
+
+  def disconnected
+    puts "Goodbye, I'm going to die"
+  end
+end
+
 Wanda.resources_for "user", except: [:new, :edit, :show]
 Wanda.post "/raise_csrf", UserController, :raise_csrf
 Wanda.put "/simulate_put", UserController, :simulate_put
-Wanda.ws_mount_at :chat_channel, ChatConnection, SocketChannel
+Wanda.web_socket_mount "/chat", TestWsConnection
 
 Wanda::Configs.bundled_with_turbolinks false
 

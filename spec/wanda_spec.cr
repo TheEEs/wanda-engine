@@ -45,5 +45,20 @@ describe Wanda do
   end
 
   context "enable a websocket connection to testing server" do
+    it "shoud establish an WebSocket Connection" do
+      message = "Hello"
+      ws = HTTP::WebSocket.new("localhost", "/chat", 3000)
+      ws.on_message do |msg|
+        CHANNEL.send(msg)
+      end
+      spawn do 
+        ws.run
+      end
+      ws.send(message)
+      received_message = CHANNEL.receive
+      received_message.should eq "send back:#{message}"
+      ws.close
+      sleep 1.second
+    end
   end
 end
