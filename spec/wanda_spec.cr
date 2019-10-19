@@ -51,7 +51,7 @@ describe Wanda do
       ws.on_message do |msg|
         CHANNEL.send(msg)
       end
-      spawn do 
+      spawn do
         ws.run
       end
       ws.send(message)
