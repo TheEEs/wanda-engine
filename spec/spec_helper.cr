@@ -66,6 +66,8 @@ class TestWsConnection < Wanda::WebSocketConnection
   def connected
     stream_from "/chat/channel"
     puts "Hello WebSocket, I'm Connected"
+    # Wanda::SOCKET_POOLS.add_connection_to_the_pool(streamed_from, self)
+    # should rise an exception
   end
 
   def received(message : String)

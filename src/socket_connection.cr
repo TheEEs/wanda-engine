@@ -5,6 +5,7 @@ module Wanda
 
   class WebSocketConnection
     @stream_from = ""
+    @added_to_the_pool = false
 
     def initialize(@socket : HTTP::WebSocket, @env : HTTP::Server::Context)
       @socket.on_message do |message|
@@ -14,6 +15,14 @@ module Wanda
         Wanda::SOCKET_POOLS.remove_connection_from_the_pool self.streamed_from, self
         self.disconnected
       end
+    end
+
+    protected def added_to_the_pool?
+      @added_to_the_pool
+    end
+
+    protected def add_to_the_pool
+      @added_to_the_pool = true
     end
 
     def env
@@ -33,7 +42,6 @@ module Wanda
     end
 
     def stop
-      # Wanda::SOCKET_POOLS.remove_connection_from_the_pool self.streamed_from, self
       @socket.close
     end
 
@@ -67,16 +75,21 @@ module Wanda
   end
 
   class WebSocketConnectionPools
+    class EntryExistedException < Exception
+    end
+
     def initialize(@pools = {} of String => Array(Wanda::WebSocketConnection))
     end
 
     def add_connection_to_the_pool(name : String, connection)
+      raise EntryExistedException.new("Connection entry existed") if connection.added_to_the_pool?
       pool = @pools[name]?
       if pool
         pool << connection
       else
         @pools[name] = [connection] of Wanda::WebSocketConnection
       end
+      connection.add_to_the_pool
     end
 
     def remove_connection_from_the_pool(name : String, connection)
