@@ -61,5 +61,4 @@ describe Wanda do
       sleep 1.second
     end
   end
-
 end
